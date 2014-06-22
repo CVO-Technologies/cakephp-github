@@ -73,8 +73,7 @@ abstract class GitHubSource extends DataSource {
 		return $data;
 	}
 
-	public function doRequest($uri) {
-		$parameters = array();
+	public function doRequest($uri, array $parameters = array()) {
 		if (isset($this->config['client_id'])) {
 			$parameters['client_id'] = $this->config['client_id'];
 		}
@@ -100,8 +99,54 @@ abstract class GitHubSource extends DataSource {
 		return $response;
 	}
 
-	abstract public function getContent(Model $model, $queryData = array(),
-	                                    $recursive = null);
+	public function getContent(Model $model, $queryData = array(),
+	                           $recursive = null) {
+		$url = $this->getBaseUrl() . '/' . $model->table;
 
+		$queryParameters = array();
+		if (count($queryData['conditions'])) {
+			foreach ($queryData['conditions'] as $field => $data) {
+				$fieldParts = explode('.', $field);
+
+				if (is_array($data)) {
+					$data = implode(',', $data);
+				}
+
+				$queryParameters[end($fieldParts)] = $data;
+			}
+		}
+		if (count($queryData['order'][0])) {
+			foreach ($queryData['order'][0] as $field => $direction) {
+				$fieldParts = explode('.', $field);
+
+				$queryParameters['sort'] = end($fieldParts);
+				$queryParameters['direction'] = strtolower($direction);
+			}
+		}
+
+		$json = $this->doRequest($url, $queryParameters);
+
+		$entities = array();
+		foreach ($json as $index => $entity) {
+			$dataEntity = array();
+
+			if (is_array($entity)) {
+				$dataEntity[$model->alias] = $entity;
+			} else {
+				$fields = array_keys($model->schema());
+
+				$dataEntity[$model->alias] = array(
+					$fields[0] => $index,
+					$fields[1]         => $entity
+				);
+			}
+
+			$entities[] = $dataEntity;
+		}
+
+		return $entities;
+	}
+
+	abstract public function getBaseUrl();
 
 }
