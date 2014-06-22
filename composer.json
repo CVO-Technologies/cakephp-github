@@ -9,6 +9,10 @@
         }
     ],
     "require": {
-        "composer/installers": "~1.0"
+        "composer/installers": "~1.0",
+        "cakephp/cakephp": ">=2.5.0"
+    },
+    "extra": {
+        "installer-name": "GitHub"
     }
 }
