@@ -2,7 +2,7 @@
 
 App::uses('GitHubAppModel', 'GitHub.Model');
 
-class RepositoryIssue extends GitHubAppModel {
+class Issue extends GitHubAppModel {
 
 	public $primaryKey = 'number';
 
