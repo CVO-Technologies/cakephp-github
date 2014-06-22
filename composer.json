@@ -1,0 +1,14 @@
+{
+    "name": "cvo-technologies/github",
+    "type": "cakephp-plugin",
+    "description": "GitHub plugin",
+    "authors": [
+        {
+            "name": "Marlin Cremers",
+            "email": "m.cremers@cvo-technologies.com"
+        }
+    ],
+    "require": {
+        "composer/installers": "~1.0"
+    }
+}
