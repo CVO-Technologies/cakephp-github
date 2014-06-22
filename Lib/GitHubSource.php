@@ -1,5 +1,6 @@
 <?php
 
+App::uses('DataSource', 'Model/Datasource');
 App::uses('HttpSocket', 'Network/Http');
 
 abstract class GitHubSource extends DataSource {
