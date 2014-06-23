@@ -55,7 +55,7 @@ class IssuesController extends AppController {
     public function index() {
         $this->Issue->setDataSource('cakephpRepository');
        
-        $issues = $this->Event->find('all', array(
+        $issues = $this->Issue->find('all', array(
             'conditions' => array(
                 'Issue.state' => 'open'
             )
