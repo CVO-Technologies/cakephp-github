@@ -2,17 +2,20 @@
     "name": "cvo-technologies/github",
     "type": "cakephp-plugin",
     "description": "GitHub plugin",
+    "license": "MIT",
     "authors": [
         {
             "name": "Marlin Cremers",
             "email": "m.cremers@cvo-technologies.com"
         }
     ],
+    "autoload": {
+        "psr-4": {
+            "CvoTechnologies\\GitHub\\": "src"
+        }
+    },
     "require": {
         "composer/installers": "~1.0",
         "cakephp/cakephp": "2.5.*"
-    },
-    "extra": {
-        "installer-name": "GitHub"
     }
 }

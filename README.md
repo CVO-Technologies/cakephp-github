@@ -2,15 +2,6 @@
 
 ## Installation
 
-* Clone/Copy the files in this directory into `app/Plugin/GitHub`
-
-This can be done with the git submodule command
-```sh
-git submodule add https://github.com/mms-projects/cakephp-github-plugin.git app/Plugin/DebugKit
-```
-
-* Ensure the plugin is loaded in `app/Config/bootstrap.php` by calling `CakePlugin::load('GitHub');`
-
 ### Using Composer
 
 Ensure `require` is present in `composer.json`. This will install the plugin into `Plugin/GitHub`:
@@ -27,18 +18,15 @@ Ensure `require` is present in `composer.json`. This will install the plugin int
 
 If you want to get information about a specific repository
 
-### Database config
+### Webservice config
 
-```php
-<?php
+Add the following to the ```Webservice``` section of your application config.
 
-class DATABASE_CONFIG {
-    public $cakephpRepository = array(
-        'datasource' => 'GitHub.RepositorySource',
-        'owner'      => 'cakephp',
-        'repository' => 'cakephp'
-    );
-}
+```
+        'git_hub' => [
+            'className' => 'Muffin\Webservice\Connection',
+            'service' => 'CvoTechnologies\GitHub\Webservice\Driver\GitHub',
+        ]
 ```
 
 ### Controller
@@ -46,23 +34,27 @@ class DATABASE_CONFIG {
 ```php
 <?php
 
-App::uses('AppController', 'Controller');
+namespace CvoTechnologies\GitHub\Controller;
 
-class IssuesController extends AppController {
+use Cake\Controller\Controller;
+use Cake\Event\Event;
 
-    public $uses = array('GitHub.Issue');
+class IssuesController extends Controller
+{
 
-    public function index() {
-        $this->Issue->setDataSource('cakephpRepository');
-       
-        $issues = $this->Issue->find('all', array(
-            'conditions' => array(
-                'Issue.state' => 'open'
-            )
-        ));
-        
-        $this->set(compact('issues'));
+    public function beforeFilter(Event $event)
+    {
+        $this->loadModel('CvoTechnologies/GitHub.Issues', 'Endpoint');
     }
 
+    public function index()
+    {
+        $issues = $this->Issues->find()->conditions([
+            'owner' => 'cakephp',
+            'repo' => 'cakephp'
+        ]);
+
+        $this->set('issues', $issues);
+    }
 }
 ```
