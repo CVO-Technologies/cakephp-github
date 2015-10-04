@@ -9,7 +9,7 @@ Ensure `require` is present in `composer.json`. This will install the plugin int
 ```json
 {
     "require": {
-        "cvo-technologies/github": "*"
+        "cvo-technologies/github": "3.0.*"
     }
 }
 ```
