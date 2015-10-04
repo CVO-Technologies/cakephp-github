@@ -115,24 +115,6 @@ class GitHubWebservice extends Webservice
     }
 
     /**
-     * Loops through the results and turns them into resource objects
-     *
-     * @param array $results Array of results from the API
-     * @param string $resourceClass The resource class to use
-     *
-     * @return array Array of resource objects
-     */
-    protected function _transformResults(array $results, $resourceClass)
-    {
-        $resources = [];
-        foreach ($results as $result) {
-            $resources[] = $this->_transformResource($result, $resourceClass);
-        }
-
-        return $resources;
-    }
-
-    /**
      * Turns a single result into a resource
      *
      * @param array $result
