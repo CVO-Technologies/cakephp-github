@@ -93,7 +93,7 @@ class GitHubWebservice extends Webservice
             $linkParameters = $this->_linkQueryParameters($links['last']);
 
             // Grab the last page number out of the Link header
-            if ((isset($linkParameters['page'])) && ($linkParameters['per_page'])) {
+            if ((isset($linkParameters['page'])) && (isset($linkParameters['per_page']))) {
                 $resourceAmount = $linkParameters['page'] * $linkParameters['per_page'];
             }
         }
