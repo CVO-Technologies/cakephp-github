@@ -49,7 +49,7 @@ class IssuesController extends Controller
 
     public function index()
     {
-        $issues = $this->Issues->find()->conditions([
+        $issues = $this->Issues->find()->where([
             'owner' => 'cakephp',
             'repo' => 'cakephp'
         ]);
