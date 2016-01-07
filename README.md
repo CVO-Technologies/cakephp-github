@@ -25,7 +25,7 @@ Add the following to the ```Webservice``` section of your application config.
 ```
         'git_hub' => [
             'className' => 'Muffin\Webservice\Connection',
-            'service' => 'CvoTechnologies\GitHub\Webservice\Driver\GitHub',
+            'service' => 'CvoTechnologies/GitHub.GitHub',
         ]
 ```
 

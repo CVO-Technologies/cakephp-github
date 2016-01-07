@@ -4,9 +4,9 @@ namespace CvoTechnologies\GitHub\Webservice;
 
 use Cake\Network\Http\Response;
 use Cake\Utility\Hash;
+use Muffin\Webservice\Query;
 use Muffin\Webservice\ResultSet;
 use Muffin\Webservice\Webservice\Webservice;
-use Muffin\Webservice\WebserviceQuery;
 
 /**
  * Class GitHubWebservice
@@ -29,7 +29,7 @@ class GitHubWebservice extends Webservice
     /**
      * {@inheritDoc}
      */
-    protected function _executeReadQuery(WebserviceQuery $query, array $options = [])
+    protected function _executeReadQuery(Query $query, array $options = [])
     {
         $url = $this->getBaseUrl();
 
@@ -45,8 +45,8 @@ class GitHubWebservice extends Webservice
 
         $search = false;
         $searchParameters = [];
-        if ($query->conditions()) {
-            foreach ($query->conditions() as $field => $value) {
+        if ($query->clause('where')) {
+            foreach ($query->clause('where') as $field => $value) {
                 switch ($field) {
                     case 'id':
                     default:
@@ -60,7 +60,7 @@ class GitHubWebservice extends Webservice
         }
 
         // Check if this query could be requested using a nested resource.
-        if ($nestedResource = $this->nestedResource($query->conditions())) {
+        if ($nestedResource = $this->nestedResource($query->clause('where'))) {
             $url = $nestedResource;
 
             // If this is the case turn search of
