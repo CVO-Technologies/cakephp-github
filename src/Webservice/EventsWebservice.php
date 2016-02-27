@@ -5,6 +5,8 @@ namespace CvoTechnologies\GitHub\Webservice;
 use Cake\Datasource\ResultSetDecorator;
 use Cake\Log\Log;
 use Cake\Network\Http\Response;
+use Cake\Utility\Inflector;
+use CvoTechnologies\GitHub\Webservice\Exception\RateLimitExceededException;
 use Muffin\Webservice\Model\Endpoint;
 use Muffin\Webservice\Query;
 
@@ -14,6 +16,7 @@ class EventsWebservice extends GitHubWebservice
     protected $_lastIds = [];
     protected $_lastEtag;
     protected $_lastPollInterval;
+    protected $_lastTime;
 
     /**
      * Initialize and add nested resources
@@ -33,7 +36,7 @@ class EventsWebservice extends GitHubWebservice
 
     protected function _executeReadQuery(Query $query, array $options = [])
     {
-        if (empty($query->getOptions()['stream'])) {
+        if (empty($query->getOptions()['poll'])) {
             return parent::_executeReadQuery($query, $options);
         }
 
@@ -58,6 +61,8 @@ class EventsWebservice extends GitHubWebservice
     protected function _stream($url, $queryParameters)
     {
         while (true) {
+            $this->_lastTime = time();
+
             $options = [];
             if ($this->_lastEtag) {
                 $options['headers']['If-None-Match'] = $this->_lastEtag;
@@ -66,6 +71,13 @@ class EventsWebservice extends GitHubWebservice
             /* @var Response $response */
             $response = $this->driver()->client()->get($url, $queryParameters, $options);
             if ((!$response->isOk()) && ($response->statusCode() != 304)) {
+                switch ($response->statusCode()) {
+                    case 403:
+                        if ($response->header('X-Ratelimit-Remaining') == 0) {
+                            var_dump($response);
+                            throw new RateLimitExceededException([$response->header('X-Ratelimit-Remaining')]);
+                        }
+                }
                 return;
             }
 
@@ -73,7 +85,8 @@ class EventsWebservice extends GitHubWebservice
                 $this->_lastEtag = $response->header('Etag');
                 $this->_lastPollInterval = $response->header('X-Poll-Interval');
 
-                foreach ($response->json as $resource) {
+                $resources = array_reverse($response->json);
+                foreach ($resources as $resource) {
                     if (in_array($resource['id'], $this->_lastIds)) {
                         continue;
                     }
@@ -85,7 +98,10 @@ class EventsWebservice extends GitHubWebservice
                 $this->_lastIds = array_splice($this->_lastIds, 0, 30);
             }
 
-            sleep($this->_lastPollInterval);
+            $sleepingTime = $this->_lastPollInterval - (time() - $this->_lastTime);
+            if ($sleepingTime > 0) {
+                sleep($sleepingTime);
+            }
         }
     }
 
@@ -103,5 +119,56 @@ class EventsWebservice extends GitHubWebservice
         foreach ($resources as $resource) {
             yield $this->_transformResource($endpoint, $resource);
         }
+    }
+
+    /**
+     * Turns a single result into a resource
+     *
+     * @param array $result
+     * @param string $resourceClass
+     * @return \Muffin\Webservice\Model\Resource
+     */
+    protected function _transformResource(Endpoint $endpoint, array $result)
+    {
+        $properties = [];
+
+        foreach ($result as $property => $value) {
+            if ((substr($property, -4) === '_url') && ($property !== 'html_url')) {
+                continue;
+            }
+
+            // If this is a relation turn it into a resource as well
+            if ((is_array($value)) && (isset($value['id']))) {
+                $value = $this->_transformResource($endpoint, $value);
+            }
+
+            $properties[$property] = $value;
+        }
+
+        $resourceClass = $endpoint->resourceClass();
+        if (isset($result['type'])) {
+            switch ($result['type']) {
+                case 'IssuesEvent':
+                case 'IssueCommentEvent':
+                case 'PullRequestEvent':
+                case 'MemberEvent':
+                case 'ReleaseEvent':
+                case 'WatchEvent':
+                    $resourceClass = 'CvoTechnologies\\GitHub\\Model\\Resource\\Event\\' . substr($result['type'], 0, -5) . '\\' . Inflector::classify($result['payload']['action'] . 'Event');
+                    break;
+                case 'CommitCommentEvent':
+                case 'CreateEvent':
+                case 'DeleteEvent':
+                case 'ForkEvent':
+                case 'GollumEvent':
+                case 'PullRequestReviewCommentEvent':
+                case 'PublicEvent':
+                case 'PushEvent':
+                    $resourceClass = 'CvoTechnologies\\GitHub\\Model\\Resource\\Event\\' . $result['type'];
+                    break;
+            }
+        }
+
+        return $this->_createResource($resourceClass, $properties);
     }
 }
