@@ -4,6 +4,7 @@ namespace CvoTechnologies\GitHub\Webservice;
 
 use Cake\Network\Http\Response;
 use Cake\Utility\Hash;
+use Muffin\Webservice\Model\Endpoint;
 use Muffin\Webservice\Query;
 use Muffin\Webservice\ResultSet;
 use Muffin\Webservice\Webservice\Webservice;
@@ -109,7 +110,7 @@ class GitHubWebservice extends Webservice
         }
 
         // Turn results into resources
-        $resources = $this->_transformResults($results, $options['resourceClass']);
+        $resources = $this->_transformResults($this->endpoint(), $results);
 
         return new ResultSet($resources, $resourceAmount);
     }
@@ -121,7 +122,7 @@ class GitHubWebservice extends Webservice
      * @param string $resourceClass
      * @return \Muffin\Webservice\Model\Resource
      */
-    protected function _transformResource(array $result, $resourceClass)
+    protected function _transformResource(Endpoint $endpoint, array $result)
     {
         $properties = [];
 
@@ -132,13 +133,13 @@ class GitHubWebservice extends Webservice
 
             // If this is a relation turn it into a resource as well
             if ((is_array($value)) && (isset($value['id']))) {
-                $value = $this->_transformResource($value, '\Muffin\Webservice\Model\Resource');
+                $value = $this->_transformResource($endpoint, $value);
             }
 
             $properties[$property] = $value;
         }
 
-        return $this->_createResource($resourceClass, $properties);
+        return $this->_createResource($endpoint->resourceClass(), $properties);
     }
 
     protected function _parseLinks($links)
