@@ -1,23 +1,23 @@
 {
-  "name": "cvo-technologies/cakephp-github",
-  "type": "cakephp-plugin",
-  "description": "GitHub plugin",
-  "license": "MIT",
-  "authors": [
-    {
-      "name": "Marlin Cremers",
-      "email": "m.cremers@cvo-technologies.com"
+    "name": "cvo-technologies/cakephp-github",
+    "type": "cakephp-plugin",
+    "description": "GitHub plugin",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Marlin Cremers",
+            "email": "m.cremers@cvo-technologies.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "CvoTechnologies\\GitHub\\": "src"
+        }
+    },
+    "require": {
+        "muffin/webservice": "1.*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "4.1.*"
     }
-  ],
-  "autoload": {
-    "psr-4": {
-      "CvoTechnologies\\GitHub\\": "src"
-    }
-  },
-  "require": {
-    "muffin/webservice": "1.*"
-  },
-  "require-dev": {
-    "phpunit/phpunit": "4.1.*"
-  }
 }
