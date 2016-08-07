@@ -41,14 +41,14 @@ class GitHubWebserviceTest extends TestCase
     public function testSearch()
     {
         StreamWrapper::emulate(HttpEmulation::fromCallable(function () {
-            return new \GuzzleHttp\Psr7\Response(200, [], json_encode(array (
+            return new \GuzzleHttp\Psr7\Response(200, [], json_encode([
                 0 =>
-                    array (
+                    [
                         'id' => 1,
                         'name' => 'repo1',
                         'full_name' => 'user1/repo1',
                         'owner' =>
-                            array (
+                            [
                                 'login' => 'user1',
                                 'id' => 1,
                                 'avatar_url' => 'https://avatars.githubusercontent.com/u/1?v=3',
@@ -66,7 +66,7 @@ class GitHubWebserviceTest extends TestCase
                                 'received_events_url' => 'https://api.github.com/users/user1/received_events',
                                 'type' => 'User',
                                 'site_admin' => false,
-                            ),
+                            ],
                         'private' => false,
                         'html_url' => 'https://github.com/user1/repo1',
                         'description' => 'Repo 1',
@@ -107,14 +107,14 @@ class GitHubWebserviceTest extends TestCase
                         'notifications_url' => 'https://api.github.com/repos/user1/repo1/notifications{?since,all,participating}',
                         'labels_url' => 'https://api.github.com/repos/user1/repo1/labels{/name}',
                         'releases_url' => 'https://api.github.com/repos/user1/repo1/releases{/id}',
-                    ),
+                    ],
                 1 =>
-                    array (
+                    [
                         'id' => 2,
                         'name' => 'repo1',
                         'full_name' => 'user2/repo1',
                         'owner' =>
-                            array (
+                            [
                                 'login' => 'user2',
                                 'id' => 2,
                                 'avatar_url' => 'https://avatars.githubusercontent.com/u/4?v=3',
@@ -132,7 +132,7 @@ class GitHubWebserviceTest extends TestCase
                                 'received_events_url' => 'https://api.github.com/users/user2/received_events',
                                 'type' => 'User',
                                 'site_admin' => false,
-                            ),
+                            ],
                         'private' => false,
                         'html_url' => 'https://github.com/user2/repo1',
                         'description' => 'Repo 1',
@@ -173,8 +173,8 @@ class GitHubWebserviceTest extends TestCase
                         'notifications_url' => 'https://api.github.com/repos/user2/repo1/notifications{?since,all,participating}',
                         'labels_url' => 'https://api.github.com/repos/user2/repo1/labels{/name}',
                         'releases_url' => 'https://api.github.com/repos/user2/repo1/releases{/id}',
-                    )
-            )));
+                    ]
+            ]));
         }));
 
         $query = new Query($this->webservice, new Endpoint);
