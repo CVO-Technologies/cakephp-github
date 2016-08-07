@@ -141,10 +141,10 @@ class GitHubWebservice extends Webservice
     /**
      * Parse Link headers from response.
      *
-     * @param array $links List of Link headers
+     * @param array|null $links List of Link headers
      * @return array
      */
-    protected function _parseLinks(array $links)
+    protected function _parseLinks($links)
     {
         $links = array_map(function ($value) {
             $matches = [];
