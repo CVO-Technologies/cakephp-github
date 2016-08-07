@@ -6,5 +6,4 @@ use CvoTechnologies\GitHub\Model\Resource\Event\PullRequestEvent;
 
 class ClosedEvent extends PullRequestEvent
 {
-
 }

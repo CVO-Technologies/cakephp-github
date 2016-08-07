@@ -6,11 +6,17 @@ use CvoTechnologies\GitHub\Model\Resource\Event;
 
 class DeleteEvent extends Event
 {
+    /**
+     * {@inheritDoc}
+     */
     public function describe()
     {
         return $this->actor->login . ' just deleted ' . $this->payload['ref_type'] . ' ' . $this->payload['ref'] . ' from ' . $this->repo->name;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function __debugInfo()
     {
         return [

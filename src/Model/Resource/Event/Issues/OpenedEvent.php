@@ -6,5 +6,4 @@ use CvoTechnologies\GitHub\Model\Resource\Event\IssuesEvent;
 
 class OpenedEvent extends IssuesEvent
 {
-
 }

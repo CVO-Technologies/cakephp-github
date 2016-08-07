@@ -26,7 +26,7 @@ class EventsWebservice extends GitHubWebservice
     ];
 
     /**
-     * Initialize and add nested resources
+     * {@inheritDoc}
      */
     public function initialize()
     {
@@ -44,6 +44,9 @@ class EventsWebservice extends GitHubWebservice
         ]);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     protected function _executeReadQuery(Query $query, array $options = [])
     {
         if (empty($query->getOptions()['poll'])) {
@@ -68,7 +71,14 @@ class EventsWebservice extends GitHubWebservice
         return new ResultSetDecorator($this->_transformStreamResponses($query->endpoint(), $responses));
     }
 
-    protected function _stream($url, $queryParameters)
+    /**
+     * Stream results from the events endpoint.
+     *
+     * @param string $url Endpoint to stream events from.
+     * @param array $queryParameters Query parameters to send
+     * @return \Generator|void
+     */
+    protected function _stream($url, array $queryParameters)
     {
         while (true) {
             $this->_lastTime = time();
@@ -88,6 +98,7 @@ class EventsWebservice extends GitHubWebservice
                             throw new RateLimitExceededException([$response->header('X-Ratelimit-Remaining')]);
                         }
                 }
+
                 return;
             }
 
@@ -132,11 +143,7 @@ class EventsWebservice extends GitHubWebservice
     }
 
     /**
-     * Turns a single result into a resource
-     *
-     * @param Endpoint $endpoint
-     * @param array $result
-     * @return \Muffin\Webservice\Model\Resource
+     * {@inheritDoc}
      */
     protected function _transformResource(Endpoint $endpoint, array $result)
     {

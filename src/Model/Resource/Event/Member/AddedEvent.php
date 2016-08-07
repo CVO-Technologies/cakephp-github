@@ -6,11 +6,17 @@ use CvoTechnologies\GitHub\Model\Resource\Event\MemberEvent;
 
 class AddedEvent extends MemberEvent
 {
+    /**
+     * {@inheritDoc}
+     */
     public function describe()
     {
         return $this->actor->login . ' just added ' . $this->payload['member']['login'] . ' as member to ' . $this->repo->name;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function __debugInfo()
     {
         return [

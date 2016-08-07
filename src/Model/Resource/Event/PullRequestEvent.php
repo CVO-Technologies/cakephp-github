@@ -6,11 +6,17 @@ use CvoTechnologies\GitHub\Model\Resource\Event;
 
 class PullRequestEvent extends Event
 {
+    /**
+     * {@inheritDoc}
+     */
     public function describe()
     {
         return $this->actor->login . ' just opened a pull request on ' . $this->repo->name . ': ' . $this->payload['pull_request']['title'];
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function __debugInfo()
     {
         return [

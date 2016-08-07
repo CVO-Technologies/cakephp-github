@@ -6,11 +6,17 @@ use CvoTechnologies\GitHub\Model\Resource\Event;
 
 class IssuesEvent extends Event
 {
+    /**
+     * {@inheritDoc}
+     */
     public function describe()
     {
         return $this->actor->login . ' just created an issue on ' . $this->repo->name . ': ' . $this->payload['issue']['title'];
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function __debugInfo()
     {
         return [

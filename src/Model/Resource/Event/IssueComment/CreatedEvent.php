@@ -6,5 +6,4 @@ use CvoTechnologies\GitHub\Model\Resource\Event\IssueCommentEvent;
 
 class CreatedEvent extends IssueCommentEvent
 {
-
 }

@@ -116,11 +116,7 @@ class GitHubWebservice extends Webservice
     }
 
     /**
-     * Turns a single result into a resource
-     *
-     * @param array $result
-     * @param string $resourceClass
-     * @return \Muffin\Webservice\Model\Resource
+     * {@inheritDoc}
      */
     protected function _transformResource(Endpoint $endpoint, array $result)
     {
@@ -142,7 +138,13 @@ class GitHubWebservice extends Webservice
         return $this->_createResource($endpoint->resourceClass(), $properties);
     }
 
-    protected function _parseLinks($links)
+    /**
+     * Parse Link headers from response.
+     *
+     * @param array $links List of Link headers
+     * @return array
+     */
+    protected function _parseLinks(array $links)
     {
         $links = array_map(function ($value) {
             $matches = [];

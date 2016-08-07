@@ -6,7 +6,7 @@ class IssuesWebservice extends GitHubWebservice
 {
 
     /**
-     * Initialize and add nested resources
+     * {@inheritDoc}
      */
     public function initialize()
     {

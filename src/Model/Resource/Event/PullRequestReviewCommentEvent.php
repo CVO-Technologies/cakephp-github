@@ -6,11 +6,17 @@ use CvoTechnologies\GitHub\Model\Resource\Event;
 
 class PullRequestReviewCommentEvent extends Event
 {
+    /**
+     * {@inheritDoc}
+     */
     public function describe()
     {
         return $this->actor->login . ' just commented on \'' . $this->payload['pull_request']['title'] . '\' (' . $this->repo->name . '): ' . $this->payload['comment']['body'];
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function __debugInfo()
     {
         return [

@@ -6,5 +6,4 @@ use CvoTechnologies\GitHub\Model\Resource\Event\ReleaseEvent;
 
 class PublishedEvent extends ReleaseEvent
 {
-
 }

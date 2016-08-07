@@ -9,6 +9,11 @@ use Muffin\Webservice\Model\Resource;
  */
 class Event extends Resource
 {
+    /**
+     * Return a text description of a event.
+     *
+     * @return string description of a event.
+     */
     public function describe()
     {
         var_dump($this);
@@ -17,6 +22,11 @@ class Event extends Resource
         return $this->id . ' - ' . $this->type . ' - ' . $this->actor->login;
     }
 
+    /**
+     * Return event debug information.
+     *
+     * @return array Debug information
+     */
     public function __debugInfo()
     {
         return [

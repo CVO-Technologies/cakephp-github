@@ -6,5 +6,4 @@ use CvoTechnologies\GitHub\Model\Resource\Event\WatchEvent;
 
 class StartedEvent extends WatchEvent
 {
-
 }
