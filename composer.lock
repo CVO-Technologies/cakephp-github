@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "31ecc75a6f354a172e4144302fa4e519",
-    "content-hash": "c377fcfb720e4b61fdf45b8b41e1315a",
+    "hash": "5330a40799eeb40da441566b3a2038d6",
+    "content-hash": "aef5161d8c59c8a9eec9c12d7e871936",
     "packages": [
         {
             "name": "muffin/webservice",
@@ -351,16 +351,16 @@
         },
         {
             "name": "cvo-technologies/stream-emulation",
-            "version": "1.0.1",
+            "version": "1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/CVO-Technologies/stream-emulation.git",
-                "reference": "b888afa404b53b22ba18dfaae65e42687abcc413"
+                "reference": "febb7051daa7c5f5a9a8bd952b0b51a0867fb616"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/CVO-Technologies/stream-emulation/zipball/b888afa404b53b22ba18dfaae65e42687abcc413",
-                "reference": "b888afa404b53b22ba18dfaae65e42687abcc413",
+                "url": "https://api.github.com/repos/CVO-Technologies/stream-emulation/zipball/febb7051daa7c5f5a9a8bd952b0b51a0867fb616",
+                "reference": "febb7051daa7c5f5a9a8bd952b0b51a0867fb616",
                 "shasum": ""
             },
             "require": {
@@ -386,7 +386,7 @@
                     "email": "m.cremers@cvo-technologies.com"
                 }
             ],
-            "time": "2016-08-07 21:00:46"
+            "time": "2016-08-07 22:53:45"
         },
         {
             "name": "doctrine/instantiator",
