@@ -6,7 +6,6 @@ use Muffin\Webservice\Model\Resource;
 
 class Event extends Resource
 {
-
     public function describe()
     {
         var_dump($this);

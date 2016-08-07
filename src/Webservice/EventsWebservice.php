@@ -3,6 +3,7 @@
 namespace CvoTechnologies\GitHub\Webservice;
 
 use Cake\Datasource\ResultSetDecorator;
+use Cake\I18n\Time;
 use Cake\Log\Log;
 use Cake\Network\Http\Response;
 use Cake\Utility\Inflector;
@@ -31,6 +32,9 @@ class EventsWebservice extends GitHubWebservice
         ]);
         $this->addNestedResource('/orgs/:org/events', [
             'org',
+        ]);
+        $this->addNestedResource('/users/:user/events', [
+            'user',
         ]);
     }
 
@@ -143,6 +147,10 @@ class EventsWebservice extends GitHubWebservice
             }
 
             $properties[$property] = $value;
+        }
+
+        if (isset($properties['created_at'])) {
+            $properties['created_at'] = new Time($properties['created_at']);
         }
 
         $resourceClass = $endpoint->resourceClass();

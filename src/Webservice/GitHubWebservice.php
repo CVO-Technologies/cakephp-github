@@ -110,7 +110,7 @@ class GitHubWebservice extends Webservice
         }
 
         // Turn results into resources
-        $resources = $this->_transformResults($this->endpoint(), $results);
+        $resources = $this->_transformResults($query->endpoint(), $results);
 
         return new ResultSet($resources, $resourceAmount);
     }
