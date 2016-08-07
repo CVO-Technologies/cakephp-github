@@ -19,6 +19,12 @@ class EventsWebservice extends GitHubWebservice
     protected $_lastPollInterval;
     protected $_lastTime;
 
+    protected static $_propertyResourceMapping = [
+        'actor' => 'User',
+        'repo' => 'Repository',
+        'org' => 'Organisation'
+    ];
+
     /**
      * Initialize and add nested resources
      */
@@ -128,8 +134,8 @@ class EventsWebservice extends GitHubWebservice
     /**
      * Turns a single result into a resource
      *
+     * @param Endpoint $endpoint
      * @param array $result
-     * @param string $resourceClass
      * @return \Muffin\Webservice\Model\Resource
      */
     protected function _transformResource(Endpoint $endpoint, array $result)
@@ -143,7 +149,12 @@ class EventsWebservice extends GitHubWebservice
 
             // If this is a relation turn it into a resource as well
             if ((is_array($value)) && (isset($value['id']))) {
-                $value = $this->_transformResource($endpoint, $value);
+                $resourceClass = 'Muffin\Webservice\Model\Resource';
+                if (isset(static::$_propertyResourceMapping[$property])) {
+                    $resourceClass = 'CvoTechnologies\GitHub\Model\Resource\\' . static::$_propertyResourceMapping[$property];
+                }
+
+                $value = $this->_createResource($resourceClass, $value);
             }
 
             $properties[$property] = $value;

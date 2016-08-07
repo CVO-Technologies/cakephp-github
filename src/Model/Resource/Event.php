@@ -4,6 +4,9 @@ namespace CvoTechnologies\GitHub\Model\Resource;
 
 use Muffin\Webservice\Model\Resource;
 
+/**
+ * @property \CvoTechnologies\GitHub\Model\Resource\User $actor
+ */
 class Event extends Resource
 {
     public function describe()
