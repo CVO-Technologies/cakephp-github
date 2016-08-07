@@ -47,9 +47,10 @@ script:
 
   - sh -c "if [ '$PHPCS' = '1' ]; then vendor/bin/phpcs -p --extensions=php --standard=vendor/cakephp/cakephp-codesniffer/CakePHP --ignore=vendor --ignore=docs ./src ./tests; fi"
 
-  - sh -c "if [ '$CODECOVERAGE' = '1' ]; then phpdbg -qrr vendor/bin/phpunit --coverage-clover=clover.xml; fi"
-  - sh -c "if [ '$CODECOVERAGE' = '1' ]; then wget -O codecov.sh https://codecov.io/bash; fi"
-  - sh -c "if [ '$CODECOVERAGE' = '1' ]; then bash codecov.sh; fi"
+  - sh -c "if [ '$CODECOVERAGE' = '1' ]; then vendor/bin/phpunit --coverage-clover=clover.xml; fi"
+
+after_success:
+  - sh -c "if [ '$CODECOVERAGE' = '1' ]; then bash <(curl -s https://codecov.io/bash); fi
 
 notifications:
   email: false
