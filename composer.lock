@@ -351,16 +351,16 @@
         },
         {
             "name": "cvo-technologies/stream-emulation",
-            "version": "1.0.0",
+            "version": "1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/CVO-Technologies/stream-emulation.git",
-                "reference": "a80f4e0485a04dc9693692b8dc25b532342ada12"
+                "reference": "b888afa404b53b22ba18dfaae65e42687abcc413"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/CVO-Technologies/stream-emulation/zipball/a80f4e0485a04dc9693692b8dc25b532342ada12",
-                "reference": "a80f4e0485a04dc9693692b8dc25b532342ada12",
+                "url": "https://api.github.com/repos/CVO-Technologies/stream-emulation/zipball/b888afa404b53b22ba18dfaae65e42687abcc413",
+                "reference": "b888afa404b53b22ba18dfaae65e42687abcc413",
                 "shasum": ""
             },
             "require": {
@@ -386,7 +386,7 @@
                     "email": "m.cremers@cvo-technologies.com"
                 }
             ],
-            "time": "2016-04-04 18:17:43"
+            "time": "2016-08-07 21:00:46"
         },
         {
             "name": "doctrine/instantiator",
