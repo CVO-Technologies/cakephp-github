@@ -1,5 +1,11 @@
 # GitHub plugin
 
+[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.txt)
+[![Build Status](https://img.shields.io/travis/cvo-technologies/cakephp-github/master.svg?style=flat-square)](https://travis-ci.org/cvo-technologies/cakephp-github)
+[![Coverage Status](https://img.shields.io/codecov/c/github/cvo-technologies/cakephp-github.svg?style=flat-square)](https://codecov.io/github/cvo-technologies/cakephp-github)
+[![Total Downloads](https://img.shields.io/packagist/dt/cvo-technologies/cakephp-github.svg?style=flat-square)](https://packagist.org/packages/cvo-technologies/cakephp-github)
+[![Latest Stable Version](https://img.shields.io/packagist/v/cvo-technologies/cakephp-github.svg?style=flat-square&label=stable)](https://packagist.org/packages/cvo-technologies/cakephp-github)
+
 ## Installation
 
 ### Using Composer
