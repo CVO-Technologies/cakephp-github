@@ -6,6 +6,8 @@ use Cake\Network\Http\Response;
 use Cake\TestSuite\TestCase;
 use CvoTechnologies\GitHub\Webservice\Driver\GitHub;
 use CvoTechnologies\GitHub\Webservice\GitHubWebservice;
+use CvoTechnologies\StreamEmulation\Emulation\HttpEmulation;
+use CvoTechnologies\StreamEmulation\StreamWrapper;
 use Muffin\Webservice\Model\Endpoint;
 use Muffin\Webservice\Query;
 
@@ -25,17 +27,21 @@ class GitHubWebserviceTest extends TestCase
             'driver' => new GitHub([]),
             'endpoint' => 'repositories'
         ]);
+
+        StreamWrapper::overrideWrapper('https');
+    }
+
+    public function tearDown()
+    {
+        parent::tearDown();
+
+        StreamWrapper::restoreWrapper('https');
     }
 
     public function testSearch()
     {
-        $httpClientMock = $this->getMock('\Cake\Network\Http\Client', ['get']);
-        $httpClientMock->expects($this->once())
-            ->method('get')
-            ->with('/repositories')
-            ->will($this->returnValue(new Response([
-                'HTTP/1.1 200 Ok'
-            ], json_encode(array (
+        StreamWrapper::emulate(HttpEmulation::fromCallable(function () {
+            return new \GuzzleHttp\Psr7\Response(200, [], json_encode(array (
                 0 =>
                     array (
                         'id' => 1,
@@ -168,16 +174,13 @@ class GitHubWebserviceTest extends TestCase
                         'labels_url' => 'https://api.github.com/repos/user2/repo1/labels{/name}',
                         'releases_url' => 'https://api.github.com/repos/user2/repo1/releases{/id}',
                     )
-            )))));
+            )));
+        }));
 
-        $this->webservice->driver()->client($httpClientMock);
-
-        $query = new Query($this->webservice, new Endpoint());
+        $query = new Query($this->webservice, new Endpoint);
         $query->read();
 
-        $resultSet = $this->webservice->execute($query, [
-            'resourceClass' => '\Muffin\Webservice\Model\Resource'
-        ]);
+        $resultSet = $this->webservice->execute($query);
         $this->assertInstanceOf('\Muffin\Webservice\ResultSet', $resultSet);
         $this->assertEquals(2, $resultSet->count());
     }

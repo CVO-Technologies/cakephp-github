@@ -1,119 +1,64 @@
 <?php
-/**
- * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
- *
- * Licensed under The MIT License
- * Redistributions of files must retain the above copyright notice.
- *
- * @copyright     Cake Software Foundation, Inc. (http://cakefoundation.org)
- * @link          http://cakephp.org CakePHP(tm) Project
- * @license       http://www.opensource.org/licenses/mit-license.php MIT License
- */
-use Cake\Cache\Cache;
-use Cake\Core\Configure;
-use Cake\Core\Plugin;
-use Cake\Datasource\ConnectionManager;
-use Cake\Log\Log;
-use Cake\Routing\DispatcherFactory;
+// @codingStandardsIgnoreFile
 
-require_once 'vendor/autoload.php';
+$findRoot = function () {
+    $root = dirname(__DIR__);
+    if (is_dir($root . '/vendor/cakephp/cakephp')) {
+        return $root;
+    }
 
-// Path constants to a few helpful things.
-define('ROOT', dirname(__DIR__) . DS);
-define('CAKE_CORE_INCLUDE_PATH', ROOT . 'vendor' . DS . 'cakephp' . DS . 'cakephp');
-define('CORE_PATH', ROOT . 'vendor' . DS . 'cakephp' . DS . 'cakephp' . DS);
-define('CAKE', CORE_PATH . 'src' . DS);
-define('TESTS', ROOT . 'tests');
-define('APP', ROOT . 'tests' . DS . 'test_app' . DS);
-define('APP_DIR', 'test_app');
+    $root = dirname(dirname(__DIR__));
+    if (is_dir($root . '/vendor/cakephp/cakephp')) {
+        return $root;
+    }
+
+    $root = dirname(dirname(dirname(__DIR__)));
+    if (is_dir($root . '/vendor/cakephp/cakephp')) {
+        return $root;
+    }
+};
+
+if (!defined('DS')) {
+    define('DS', DIRECTORY_SEPARATOR);
+}
+define('ROOT', $findRoot());
+define('APP_DIR', 'App');
 define('WEBROOT_DIR', 'webroot');
-define('WWW_ROOT', APP . 'webroot' . DS);
-define('TMP', sys_get_temp_dir() . DS);
-define('CONFIG', APP . 'config' . DS);
-define('CACHE', TMP);
-define('LOGS', TMP);
+define('APP', ROOT . '/tests/App/');
+define('CONFIG', ROOT . '/tests/config/');
+define('WWW_ROOT', ROOT . DS . WEBROOT_DIR . DS);
+define('TESTS', ROOT . DS . 'tests' . DS);
+define('TMP', ROOT . DS . 'tmp' . DS);
+define('LOGS', TMP . 'logs' . DS);
+define('CACHE', TMP . 'cache' . DS);
+define('CAKE_CORE_INCLUDE_PATH', ROOT . '/vendor/cakephp/cakephp');
+define('CORE_PATH', CAKE_CORE_INCLUDE_PATH . DS);
+define('CAKE', CORE_PATH . 'src' . DS);
 
-$loader = new \Cake\Core\ClassLoader;
-$loader->register();
+require ROOT . '/vendor/autoload.php';
+require CORE_PATH . 'config/bootstrap.php';
 
-$loader->addNamespace('TestApp', APP);
-$loader->addNamespace('SomeVendor\SomePlugin', APP . 'plugins' . DS . 'SomeVendor' . DS . 'SomePlugin' . DS . 'src');
+Cake\Core\Configure::write('App', ['namespace' => 'Crud\Test\App']);
+Cake\Core\Configure::write('debug', true);
 
-require_once CORE_PATH . 'config/bootstrap.php';
+$TMP = new \Cake\Filesystem\Folder(TMP);
+$TMP->create(TMP . 'cache/models', 0777);
+$TMP->create(TMP . 'cache/persistent', 0777);
+$TMP->create(TMP . 'cache/views', 0777);
 
-date_default_timezone_set('UTC');
-mb_internal_encoding('UTF-8');
-
-Configure::write('debug', true);
-Configure::write('App', [
-    'namespace' => 'CvoTechnologies\\GitHub\\Test\\test_app',
-    'encoding' => 'UTF-8',
-    'base' => false,
-    'baseUrl' => false,
-    'dir' => 'src',
-    'webroot' => 'webroot',
-    'www_root' => APP . 'webroot',
-    'fullBaseUrl' => 'http://localhost',
-    'imageBaseUrl' => 'img/',
-    'jsBaseUrl' => 'js/',
-    'cssBaseUrl' => 'css/',
-    'paths' => [
-        'plugins' => [APP . 'Plugin' . DS],
-        'templates' => [APP . 'Template' . DS]
-    ]
-]);
-Configure::write('Session', [
+Cake\Core\Configure::write('Session', [
     'defaults' => 'php'
 ]);
 
-Cache::config([
-    '_cake_core_' => [
-        'engine' => 'File',
-        'prefix' => 'cake_core_',
-        'serialize' => true
-    ],
-    '_cake_model_' => [
-        'engine' => 'File',
-        'prefix' => 'cake_model_',
-        'serialize' => true
-    ],
-    'default' => [
-        'engine' => 'File',
-        'prefix' => 'default_',
-        'serialize' => true
-    ]
-]);
+Cake\Routing\DispatcherFactory::add('Routing');
+Cake\Routing\DispatcherFactory::add('ControllerFactory');
 
 // Ensure default test connection is defined
 if (!getenv('db_dsn')) {
-    putenv('db_dsn=sqlite:/' . TMP . 'debug_kit_test.sqlite');
+    putenv('db_dsn=sqlite:///:memory:');
 }
 
-$config = [
+Cake\Datasource\ConnectionManager::config('test', [
     'url' => getenv('db_dsn'),
-    'timezone' => 'UTC',
-];
-
-// Use the test connection for 'debug_kit' as well.
-ConnectionManager::config('test', $config);
-ConnectionManager::config('test_webservice', $config);
-
-
-Log::config([
-    'debug' => [
-        'engine' => 'Cake\Log\Engine\FileLog',
-        'levels' => ['notice', 'info', 'debug'],
-        'file' => 'debug',
-    ],
-    'error' => [
-        'engine' => 'Cake\Log\Engine\FileLog',
-        'levels' => ['warning', 'error', 'critical', 'alert', 'emergency'],
-        'file' => 'error',
-    ]
+    'timezone' => 'UTC'
 ]);
-
-Plugin::load('CvoTechnologies/GitHub', ['path' => ROOT]);
-
-DispatcherFactory::add('Routing');
-DispatcherFactory::add('ControllerFactory');
