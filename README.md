@@ -9,7 +9,7 @@ Ensure `require` is present in `composer.json`. This will install the plugin int
 ```json
 {
     "require": {
-        "cvo-technologies/github": "3.0.*"
+        "cvo-technologies/cakephp-github": "~1.1"
     }
 }
 ```
