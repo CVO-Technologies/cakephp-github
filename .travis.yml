@@ -72,4 +72,7 @@ after_success:
 
 notifications:
   email: false
-  irc: "chat.freenode.net#cvo-technologies"
+  irc:
+    channels:
+      - "chat.freenode.net#cvo-technologies"
+    on_success: change
