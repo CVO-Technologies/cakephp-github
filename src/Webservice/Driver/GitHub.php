@@ -2,7 +2,7 @@
 
 namespace CvoTechnologies\GitHub\Webservice\Driver;
 
-use Cake\Network\Http\Client;
+use Cake\Http\Client;
 use Muffin\Webservice\AbstractDriver;
 
 /**
